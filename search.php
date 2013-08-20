@@ -1,14 +1,18 @@
-<?php
-	require_once('db.php');
-	if(!$dbconn = mysql_connect(DB_HOST, DB_USER, DB_PW)) {
-	echo 'Could not connect to mysql on ' . DB_HOST . '\n';
-	exit;
-	}
-	echo 'Connected to mysql <br />';
-	if(!mysql_select_db(DB_NAME, $dbconn)) {
-	echo 'Could not user database ' . DB_NAME . '\n';
-	echo mysql_error() . '\n';
-	exit;
-	}
-	echo 'Connected to database ' . DB_NAME . '\n';
-?>
+<html>
+<head>
+</head>
+<body>
+	<h2>Winestore Database</h2>
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?> " method = "post">
+		Wine Name:<input name="winename" type="text"><br />
+		Winery Name:<input name="wineryname" type="text"><br />
+		Region:<input name="winename" type="text"><br />
+		Grape Variety:<input name="winename" type="text"><br />
+		Years:<input name="lowyear" type="text">&nbsp&nbsp<input name="upyear" type="text">
+		<br />Minimum number of wines In Stock:<input name="minstock" type="text"><br />
+		Minimum number of wines Ordered:<input name="minordered" type="text"><br />
+	Cost Range:<input name="mincost" type="text">&nbsp&nbsp<input name="maxcost" type="text">
+	<br /><input name="submitBtn" type = "submit">	
+	</form>
+</body>
+</html>
