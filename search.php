@@ -6,7 +6,7 @@
 </head>
 <body>
 	<h2>Winestore Database</h2>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?> " method = "post">
+	<form action="results.php" method = "GET">
 	<?php
   	require "db.php";
 	
@@ -58,14 +58,14 @@
     		showerror();
   	}		
 	?>
-		Wine Name:<input name="winename" type="text"><br />
-		Winery Name:<input name="wineryname" type="text"><br />
-		Region: <?php selectDistinct($connection, "region", "region_name", "region", "All"); ?><br />
-		Grape Variety: <?php selectDistinct($connection, "wine", "wine_type", "wineType", "All"); ?><br />
+		Wine Name:<input name="wineName" type="text"><br />
+		Winery Name:<input name="wineryName" type="text"><br />
+		Region: <?php selectDistinct($connection, "region", "region_name", "regionName", "All"); ?><br />
+		Grape Variety: <?php selectDistinct($connection, "grape_variety", "variety", "grapeVariety", "All"); ?><br />
 		Year: <?php selectDistinct($connection, "wine", "year", "lowYear", "All"); ?> &nbsp-&nbsp<?php selectDistinct($connection, "wine", "year", "upYear", "All"); ?> 
-		<br />Minimum number of wines In Stock:<input name="minstock" type="text"><br />
-		Minimum number of wines Ordered:<input name="minordered" type="text"><br />
-		Cost Range:<input name="mincost" type="text">&nbsp&nbsp<input name="maxcost" type="text">
+		<br />Minimum number of wines In Stock:<input name="minStock" type="text"><br />
+		Minimum number of wines Ordered:<input name="minOrdered" type="text"><br />
+		Cost Range:<input name="minCost" type="text">&nbsp&nbsp<input name="maxCost" type="text">
 		<br /><input name="submitBtn" type = "submit">	
 	</form>
 </body>

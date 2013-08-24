@@ -31,28 +31,39 @@
       // ... print out a header
       print "Wines of $regionName<br>";
 
-      // and start a <table>.
-      print "\n<table>\n<tr>" .
-          "\n\t<th>Wine ID</th>" .
-          "\n\t<th>Wine Name</th>" .
-          "\n\t<th>Year</th>" .
-          "\n\t<th>Winery</th>" .
-          "\n\t<th>Description</th>\n</tr>";
+      	// and start a <table>.
+      	print "\n<table>\n<tr>" .
+          	"\n\t<th>Wine Name</th>" .
+		"\n\t<th>Grape Variety</th>" .
+          	"\n\t<th>Year</th>" .
+          	"\n\t<th>Winery</th>" .
+		"\n\t<th>Region</th>" .
+		"\n\t<th>Cost in Inventory</th>" .
+		"\n\t<th>Total Available Bottles</th>" .
+		"\n\t<th>Total Stock Sold</th>" .
+          	"\n\t<th>Total Sales Revenue</th>\n</tr>";
 
       // Fetch each of the query rows
       while ($row = @ mysql_fetch_array($result)) {
         // Print one row of results
-        print "\n<tr>\n\t<td>{$row["wine_id"]}</td>" .
-            "\n\t<td>{$row["wine_name"]}</td>" .
-            "\n\t<td>{$row["year"]}</td>" .
-            "\n\t<td>{$row["winery_name"]}</td>" .
-            "\n\t<td>{$row["description"]}</td>\n</tr>";
+        print 	"\n<tr>\n\t<td>{$row["wine_id"]}</td>" .
+            	"\n\t<td>{$row["variety"]}</td>" .
+            	"\n\t<td>{$row["year"]}</td>" .
+            	"\n\t<td>{$row["winery_name"]}</td>" .
+		"\n\t<td>{$row["region_name"]}</td>" .
+		"\n\t<td>{$row["cost"]}</td>" .
+		"\n\t<td>{$row["on_hand"]}</td>" .
+		"\n\t<td>{$row["total_sold"]}</td>" .
+            	"\n\t<td>{$row["total_revenue"]}</td>\n</tr>";
       } // end while loop body
 
       // Finish the <table>
       print "\n</table>";
     } // end if $rowsFound body
-
+	else
+	{
+		print "No records found matching your criteria<br/>";
+	}
     // Report how many rows were found
     print "{$rowsFound} records found matching your criteria<br>";
   } // end of function
@@ -63,7 +74,16 @@
   }
 
   // get the user data
+  $wineName = $_GET['wineName'];
+  $wineryName = $_GET['wineryName'];
   $regionName = $_GET['regionName'];
+  $grapeVariety = $_GET['grapeVariety'];
+  $lowYear = $_GET['lowYear'];
+  $upYear = $_GET['upYear'];
+  $minStock = $_GET['minStock'];
+  $minOrdered = $_GET['minOrdered'];
+  $minCost = $_GET['minCost'];
+  $maxCost = $_GET['maxCost'];  
 
   if (!mysql_select_db(DB_NAME, $connection)) {
     showerror();
@@ -78,6 +98,34 @@ AND wine.winery_id = winery.winery_id";
   // ... then, if the user has specified a region, add the regionName
   // as an AND clause ...
   if (isset($regionName) && $regionName != "All") {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($wineName)) {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($wineryName)) {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($grapeVariety)) {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($lowYear) && isset($upYear)) {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($minStock)) {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($minOrdered)) {
+    $query .= " AND region_name = '{$regionName}'";
+  }
+
+  if (isset($minCost) && isset($maxCost)) {
     $query .= " AND region_name = '{$regionName}'";
   }
 
