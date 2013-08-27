@@ -7,7 +7,30 @@
 <title>Result</title>
 </head>
 <body>
+<style>
+h2
+{
+font-family:Arial,Helvetica,sans-serif;
+text-align:center;
+margin-left:auto;
+}
+table
+{
+font-family:Arial,Helvetica,sans-serif;
+border-collapse:collapse;
+margin-left:auto;
+margin-right:auto;
+width:70%;
+}
+table,th, td
+{
+text-align:center;
+padding:5px;
+vertical-align:middle;
+border: 1px solid black;
+}
 
+</style>
 <?php
 
   function showerror() {
@@ -29,7 +52,7 @@
     // If the query has results ...
     if ($rowsFound > 0) {
       // ... print out a header
-      print "Wines of $regionName<br>";
+print "<h2>Search Result(s)</h2><br>";
 
       	// and start a <table>.
       	print "\n<table><tr>" .
@@ -92,7 +115,12 @@
   // Start a query ...
   $query = "SELECT wine_name, variety, year, winery_name, region_name, cost, on_hand, SUM(items.qty) AS TotalStockSold, SUM(items.qty) * inventory.cost AS TotalRevenue 
 FROM winery, region, wine, items, inventory, grape_variety, wine_variety
-WHERE winery.region_id = region.region_id AND wine.winery_id = winery.winery_id AND wine_variety.wine_id = wine.wine_id AND wine_variety.variety_id = grape_variety.variety_id AND inventory.wine_id = wine.wine_id AND items.wine_id = wine.wine_id";
+WHERE winery.region_id = region.region_id 
+AND wine.winery_id = winery.winery_id 
+AND wine_variety.wine_id = wine.wine_id 
+AND wine_variety.variety_id = grape_variety.variety_id 
+AND inventory.wine_id = wine.wine_id 
+AND items.wine_id = wine.wine_id";
 
   // ... then, if the user has specified a region, add the regionName
   // as an AND clause ...
@@ -100,19 +128,19 @@ WHERE winery.region_id = region.region_id AND wine.winery_id = winery.winery_id 
     $query .= " AND region_name = '{$regionName}'";
   }
 
-  if (isset($wineName) && $wineName != "") {
-    $query .= " AND wine_name LIKE '% '{$wineName}' %'";	
+  if (isset($wineName) && $wineName != "" ) {
+    $query .= " AND wine_name LIKE '%{$wineName}%'";	
   }
 
   if (isset($wineryName) && $wineryName != "") {
-    $query .= " AND winery_name LIKE '% '{$wineryName}' %'";
+    $query .= " AND winery_name LIKE '%{$wineryName}%'";
   }
 
-  if (isset($grapeVariety) && $grapeVariety != "") {
-    $query1 .= " AND grape_variety.variety = '{$grapeVariety}'";
+  if (isset($grapeVariety) && $grapeVariety != "All") {
+    $query .= " AND grape_variety.variety = '{$grapeVariety}'";
   }
 
-  if (isset($lowYear) && isset($upYear)){
+  if (isset($lowYear) && isset($upYear) && $lowYear != "All" && $upYear != "All"){
     $query .= " AND year BETWEEN '{$lowYear}' AND '{$upYear}'";
   }
 
@@ -120,17 +148,18 @@ WHERE winery.region_id = region.region_id AND wine.winery_id = winery.winery_id 
     $query .= " AND inventory.on_hand >= '{$minStock}'";
   }
 
-  if (isset($minOrdered) && $minOrdered != "") {
-    $query .= " AND TotalStockSold >= '{$minOrdered}'";
-  }
-
   if (isset($minCost) && isset($maxCost) && $minCost != "" && $maxCost != "") {
     $query .= " AND cost >= '{$minCost}' AND cost <= '{$maxCost}'";
   }
 
   // ... and then complete the query.
-  $query .= " GROUP BY wine_name ORDER BY wine_name;";
+  $query .= " GROUP BY wine_name, variety";
 
+  if (isset($minOrdered) && $minOrdered != "") {
+    $query .= " HAVING TotalStockSold  >= '{$minOrdered}'";
+  }
+
+  $query .= " ORDER BY wine_name;";
   // run the query and show the results
   displayWinesList($connection, $query, $regionName);
 ?>

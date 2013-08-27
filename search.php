@@ -29,8 +29,11 @@
 
     	// Start the select widget
     	print "\n<select name=\"{$pulldownName}\">";
-
-    	// Retrieve each row from the query
+		
+        if ($tableName !='region')
+		print "\n\t<option value = \"All\">All</option>";
+    	
+	// Retrieve each row from the query
     	while ($row = @ mysql_fetch_array($resultId))
     	{
      	// Get the value for the attribute to be displayed
@@ -38,7 +41,7 @@
 
      	// Check if a defaultValue is set and, if so, is it the
      	// current database value?
-     	if (isset($defaultvalue) && $result == $defaultValue)
+     	if (isset($defaultValue) && $result == $defaultValue)
        	// Yes, show as selected
        	print "\n\t<option selected value=\"{$result}\">{$result}";
      	else
@@ -60,7 +63,7 @@
 	?>
 		Wine Name:<input name="wineName" type="text"><br />
 		Winery Name:<input name="wineryName" type="text"><br />
-		Region: <?php selectDistinct($connection, "region", "region_name", "regionName", "All"); ?><br />
+		Region: <?php selectDistinct($connection, "region", "region_name", "regionName", ""); ?><br />
 		Grape Variety: <?php selectDistinct($connection, "grape_variety", "variety", "grapeVariety", "All"); ?><br />
 		Year: <?php selectDistinct($connection, "wine", "year", "lowYear", "All"); ?> &nbsp-&nbsp<?php selectDistinct($connection, "wine", "year", "upYear", "All"); ?> 
 		<br />Minimum number of wines In Stock:<input name="minStock" type="text"><br />
