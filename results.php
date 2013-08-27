@@ -113,7 +113,7 @@ print "<h2>Search Result(s)</h2><br>";
   }
 
   // Start a query ...
-  $query = "SELECT wine_name, variety, year, winery_name, region_name, cost, on_hand, SUM(items.qty) AS TotalStockSold, SUM(items.qty) * inventory.cost AS TotalRevenue 
+  $query = "SELECT wine_name, variety, year, winery_name, region_name, cost, on_hand, SUM(items.qty) AS TotalStockSold, SUM(items.price) AS TotalRevenue 
 FROM winery, region, wine, items, inventory, grape_variety, wine_variety
 WHERE winery.region_id = region.region_id 
 AND wine.winery_id = winery.winery_id 
@@ -153,7 +153,7 @@ AND items.wine_id = wine.wine_id";
   }
 
   // ... and then complete the query.
-  $query .= " GROUP BY wine_name, variety";
+  $query .= " GROUP BY wine.wine_id";
 
   if (isset($minOrdered) && $minOrdered != "") {
     $query .= " HAVING TotalStockSold  >= '{$minOrdered}'";
