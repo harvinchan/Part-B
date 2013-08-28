@@ -134,8 +134,8 @@ AND wine_variety.variety_id = grape_variety.variety_id
 AND inventory.wine_id = wine.wine_id 
 AND items.wine_id = wine.wine_id";
 
-  // ... then, if the user has specified a region, add the regionName
-  // as an AND clause ...
+  // if statements to check whether the user entered something in the field
+  // Add filter to the search if something is inputted on the form.
   if (isset($regionName) && $regionName != "All") {
     $query .= " AND region_name = '{$regionName}'";
   }
@@ -167,13 +167,15 @@ AND items.wine_id = wine.wine_id";
   // ... and then complete the query.
   $query .= " GROUP BY wine.wine_id, variety ";
 
+  // Check if user specified a minimum number of ordered wine.
   if (isset($minOrdered) && $minOrdered != "") {
     $query .= " HAVING TotalStockSold  >= '{$minOrdered}'";
   }
-
+  
+  // Specifies the order of the table, must be at the last part of the query.
   $query .= " ORDER BY wine_name;";
   
-  // run the query and show the results
+  // Validation
   if(!checkNumber($minCost,'Minimum Cost'))
       echo '<a href="search.php">GO BACK</a>';
   else if(!checkNumber($maxCost,'Maximum Cost'))
@@ -198,9 +200,7 @@ AND items.wine_id = wine.wine_id";
      echo 'Error - Minimum Cost must be lower than Maximum Cost'; ?> <br/> <?php
      echo '<a href="search.php">GO BACK</a>';
   }
-
-
-
+  // If all data provided are valid, then show all results
   else
      displayWinesList($connection, $query, $regionName);
 ?>
