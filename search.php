@@ -71,5 +71,18 @@
 		Cost Range:<input name="minCost" type="text">&nbsp&nbsp<input name="maxCost" type="text">
 		<br /><input name="submitBtn" type = "submit">	
 	</form>
+	<?php
+	
+	function checkNumber($number, $input)
+	{
+	   if(!is_numeric($number) && $number != "")
+	   {
+	      echo 'Error - '.$input.' must be numeric.'."\n";
+	      return FALSE;
+	   }
+	   else
+	      return TRUE;
+	} 
+	?>
 </body>
 </html>

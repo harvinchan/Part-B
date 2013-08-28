@@ -39,6 +39,18 @@ border: 1px solid black;
 
   require 'db.php';
 
+  // Validation
+  function checkNumber($number, $input)
+        {
+           if(!is_numeric($number) && $number != "")
+           {
+              echo 'Error - '.$input.' must be numeric.' ?> <br/> <?php ;
+              return FALSE;
+           }
+           else
+              return TRUE;
+        }
+
   // Show all wines in a region in a <table>
   function displayWinesList($connection, $query, $regionName) {
     // Run the query on the server
@@ -153,15 +165,44 @@ AND items.wine_id = wine.wine_id";
   }
 
   // ... and then complete the query.
-  $query .= " GROUP BY wine.wine_id";
+  $query .= " GROUP BY wine.wine_id, variety ";
 
   if (isset($minOrdered) && $minOrdered != "") {
     $query .= " HAVING TotalStockSold  >= '{$minOrdered}'";
   }
 
   $query .= " ORDER BY wine_name;";
+  
   // run the query and show the results
-  displayWinesList($connection, $query, $regionName);
+  if(!checkNumber($minCost,'Minimum Cost'))
+      echo '<a href="search.php">GO BACK</a>';
+  else if(!checkNumber($maxCost,'Maximum Cost'))
+  {
+     echo '<a href="search.php">GO BACK</a>'; 
+  }
+   else if(!checkNumber($minStock,'Minimum Stock'))
+  {
+     echo '<a href="search.php">GO BACK</a>';
+  }
+   else if(!checkNumber($minOrdered, 'Minimum Ordered'))
+  {
+     echo '<a href="search.php">GO BACK</a>';
+  }
+   else if($lowYear > $upYear)
+  {
+     echo 'Error - Minimum Year must be lower than Maximum Year'; ?> <br/> <?php
+     echo '<a href="search.php">GO BACK</a>';
+  }
+  else if($minCost > $maxCost)
+  {
+     echo 'Error - Minimum Cost must be lower than Maximum Cost'; ?> <br/> <?php
+     echo '<a href="search.php">GO BACK</a>';
+  }
+
+
+
+  else
+     displayWinesList($connection, $query, $regionName);
 ?>
 </body>
 </html>
