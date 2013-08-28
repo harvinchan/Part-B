@@ -100,7 +100,10 @@ print "<h2>Search Result(s)</h2><br>";
 		print "No records found matching your criteria<br/>";
 	}
     // Report how many rows were found
+    if($rowsFound != 0)
+    {
     print "{$rowsFound} records found matching your criteria<br>";
+    }
   } // end of function
 
   // Connect to the MySQL server
